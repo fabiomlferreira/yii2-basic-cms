@@ -115,7 +115,7 @@ return [
             'cost' => 12,
             'admins' => ['fabiomlferreira'],
             'modelMap' => [
-                //'User' => 'common\models\User',
+                'User' => 'common\models\User',
                 //'LoginForm' => 'common\models\user\LoginForm',
                 //'Profile' => 'common\models\Profile',
                 //'Account' => 'common\models\user\Account', //override to save access_token on data field on social_account table

@@ -22,15 +22,28 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'restrito'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'userlist'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return \Yii::$app->user->can('adminApp');
+                        }
                     ],
                 ],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest)
+                        $this->redirect(['/login']);
+                    else
+                        $this->redirect(['/site/restrito', 
+                            'name' => Yii::t('app', 'Access denied'), 
+                            'message' => Yii::t('app', 'You have no permission to access this page'), 
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/'])
+                        ]); //frontend url;
+                }
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -39,6 +52,24 @@ class SiteController extends Controller
                 ],
             ],
         ];
+    }
+    
+    public function beforeAction($action)
+    {
+        if ($action->id == 'error')
+            $this->layout = 'wrapper-black';
+
+        return parent::beforeAction($action);
+    }
+    
+    public function actionRestrito($name, $message, $url = null)
+    {
+        $this->layout = 'wrapper-black';
+        return $this->render('/site/error', [
+                'name' => $name,
+                'message' => $message,
+                'url' => $url
+        ]);
     }
 
     /**
@@ -52,47 +83,42 @@ class SiteController extends Controller
             ],
         ];
     }
-
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
+    
     public function actionIndex()
     {
         return $this->render('index');
     }
 
-    /**
-     * Login action.
-     *
-     * @return string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return string
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
 
         return $this->goHome();
     }
+    
+    /**
+     * Return the user that we can send a message
+     * @param type $q
+     * @param type $id
+     * @return type
+     */
+    public function actionUserlist($q = null, $id = null) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, username AS text')
+                ->from('user')
+                ->where('username LIKE "%' . $q .'%"')
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => \common\models\User::find($id)->name];
+        }
+        return $out;
+    }
+    
 }

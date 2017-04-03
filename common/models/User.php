@@ -2,188 +2,143 @@
 namespace common\models;
 
 use Yii;
-use yii\base\NotSupportedException;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use yii\base\Model;
+
+use dektrium\user\Finder;
+use dektrium\user\models\User as BaseUser;
 use yii\web\IdentityInterface;
+use yii\base\NotSupportedException;
+use dektrium\user\helpers\Password;
 
 /**
- * User model
+ * User ActiveRecord model.
  *
+ * Database fields:
  * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
+ * @property string  $username
+ * @property string  $email
+ * @property string  $unconfirmed_email
+ * @property string  $password_hash
+ * @property string  $auth_key
+ * @property integer $registration_ip
+ * @property integer $confirmed_at
+ * @property integer $blocked_at
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property integer $flags
+ * @property string  $role
+ * @property integer $views
+ *
+ * Defined relations:
+ * @property Account[] $accounts
+ * @property Profile   $profile
+ *
+ * @author Dmitry Erofeev <dmeroff@gmail.com>
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends BaseUser implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
+    /** @var Profile|null */
+    private $_profile;
+    
+    const ROLE_USER = 'user';
+    const ROLE_SELLER = 'seller';
+    const ROLE_MANAGER = 'manager';
+    const ROLE_ADMIN = 'admin';
 
-
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    /** @inheritdoc */
+    public function attributeLabels()
     {
-        return '{{%user}}';
+        $attributes = parent::attributeLabels();
+        $attributes['role'] = \Yii::t('user', 'Role');
+        return $attributes;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
+    
+     /** @inheritdoc */
     public function rules()
     {
+        $rules = parent::rules();
+        $rules[] = ['role', 'string', 'max' => 32];
+        return $rules;
+    }
+    
+    /** @inheritdoc */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['register'][] ='role';
+        $scenarios['create'][] = 'role';
+        $scenarios['update'][] = 'role';
+        return $scenarios;
+    }
+    
+    /** @inheritdoc */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            
+            $this->profile->gravatar_email = $this->email;
+            $this->profile->save(false);
+            
+        }
+    }
+    
+    /**
+     * Set the user_id if not selected
+     * @param type $insert
+     * @return type
+     */
+    public function beforeSave($insert) 
+    {
+        if(empty($this->role))
+            $this->role = 'user';
+        return parent::beforeSave($insert);
+    }
+    
+    /**
+     * Devolve um array com os valores que o campo role pode ter
+     * @return array
+     */
+    public function getRoleOptions()
+    {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            self::ROLE_USER =>  'user', 
+            self::ROLE_SELLER =>  'seller', 
+            self::ROLE_MANAGER =>  'manager', 
+            self::ROLE_ADMIN =>  'admin', 
         ];
     }
-
-    /**
-     * @inheritdoc
+    
+     /**
+     * Devolve o texto relativo ao role selecionado
+     * @return array
      */
-    public static function findIdentity($id)
+    public function getRole($role)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        $array = self::getRoleOptions();
+        return $array[$role];
     }
-
-    /**
-     * @inheritdoc
+    
+     /**
+     * Desolve o label do status para usar em gridviews e assim basta meter no attribute roleLabel
+     * @return array
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public function getRoleLabel()
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        $array = self::getRoleOptions();
+        return $array[$this->role];
     }
-
+    
+    
     /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
+     * Retorna o nome completo do utilizador se não tiver retorna o email
+     * @return type
      */
-    public static function findByUsername($username)
-    {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-    }
-
-    /**
-     * Finds user by password reset token
-     *
-     * @param string $token password reset token
-     * @return static|null
-     */
-    public static function findByPasswordResetToken($token)
-    {
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
+    public function getCompleteName(){
+        if(!empty($this->profile->name)){
+            return $this->profile->name;
+        }else{
+            return $this->username;
         }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    /**
-     * Finds out if password reset token is valid
-     *
-     * @param string $token password reset token
-     * @return bool
-     */
-    public static function isPasswordResetTokenValid($token)
-    {
-        if (empty($token)) {
-            return false;
-        }
-
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
-        return $timestamp + $expire >= time();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAuthKey()
-    {
-        return $this->auth_key;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAuthKey() === $authKey;
-    }
-
-    /**
-     * Validates password
-     *
-     * @param string $password password to validate
-     * @return bool if password provided is valid for current user
-     */
-    public function validatePassword($password)
-    {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
-    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    /**
-     * Generates "remember me" authentication key
-     */
-    public function generateAuthKey()
-    {
-        $this->auth_key = Yii::$app->security->generateRandomString();
-    }
-
-    /**
-     * Generates new password reset token
-     */
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
     }
 }

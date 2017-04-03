@@ -25,7 +25,18 @@
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-widget-datepicker": "*",
         "kartik-v/yii2-widget-timepicker": "*",
-        "kartik-v/yii2-widget-select2": "*"
+        "kartik-v/yii2-widget-select2": "*",
+        "bower-asset/admin-lte": "*@stable",
+        "bower-asset/simple-line-icons":"*",
+        "bower-asset/owl.carousel":"*",
+        "bower-asset/magnific-popup": "*",
+        "bower-asset/modernizr": "*",
+        "bower-asset/jquery.cookie": "*",
+        "bower-asset/jquery-validation": "*",
+        "bower-asset/jquery.easy-pie-chart": "*",
+        "bower-asset/jquery.lazyload":"*",
+        "bower-asset/isotope":"*",
+        "bower-asset/vide":"*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
