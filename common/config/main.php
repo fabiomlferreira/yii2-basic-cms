@@ -1,6 +1,8 @@
 <?php
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'name' => "Dietas",
+    'language' => 'pt-PT',
     'components' => [
         /*'assetManager' => [
             'appendTimestamp' => true,
@@ -85,8 +87,47 @@ return [
                 ],*//*
             ],
         ],*/
+        'thumbnail' => [
+            'class' => 'fabiomlferreira\filemanager\Thumbnail',
+            'cachePath' => '@webroot/assets/thumbnails',
+            'basePath' => '@webroot',
+            'cacheExpire' => 2592000,
+            'options' => [
+                'placeholder' => [
+                    'type' => fabiomlferreira\filemanager\Thumbnail::PLACEHOLDER_TYPE_JS,
+                    'backgroundColor' => '#f5f5f5',
+                    'textColor' => '#cdcdcd',
+                    'text' => 'Ooops',
+                    'random' => true,
+                    'cache' => false,
+                ],
+                'quality' => 75
+            ]
+        ],
     ],
     'modules' => [
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableUnconfirmedLogin' => false,
+            'enableFlashMessages' => false,
+            'enableRegistration' => true,
+            'confirmWithin' => 21600,
+            'cost' => 12,
+            'admins' => ['fabiomlferreira'],
+            'modelMap' => [
+                //'User' => 'common\models\User',
+                //'LoginForm' => 'common\models\user\LoginForm',
+                //'Profile' => 'common\models\Profile',
+                //'Account' => 'common\models\user\Account', //override to save access_token on data field on social_account table
+                /*'RegistrationForm' => 'common\models\user\RegistrationForm',
+                'LoginForm' => 'common\models\user\LoginForm',
+                'SettingsForm' => 'common\models\user\SettingsForm',
+                'RecoveryForm' => 'common\models\user\RecoveryForm',
+                'ResendForm' => 'common\models\user\ResendForm',*/
+
+            ],
+
+        ],
         'filemanager' => [
             'class' => 'fabiomlferreira\filemanager\Module',
             //'class' => 'pendalf89\filemanager\Module',
@@ -94,7 +135,7 @@ return [
             'autoUpload' => true,
             'optimizeOriginalImage' => true,
             'maxSideSize' => 1200,
-            'thumbnailOnTheFly' => false,  //if is true the component thumbnail should be used
+            'thumbnailOnTheFly' => true,  //if is true the component thumbnail should be used
             // Upload routes
             'routes' => [
                 // Base absolute path to web directory

@@ -19,7 +19,13 @@
         "yiisoft/yii2": "~2.0.6",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "fabiomlferreira/yii2-file-manager":"dev-master"
+        "fabiomlferreira/yii2-file-manager":"dev-master",
+        "bower-asset/font-awesome": "*",
+        "dektrium/yii2-user": "*",
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-widget-datepicker": "*",
+        "kartik-v/yii2-widget-timepicker": "*",
+        "kartik-v/yii2-widget-select2": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
