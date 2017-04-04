@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </div><!-- /.box-header -->
             <!-- form start -->
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
         </div>
     </div>
 </div>

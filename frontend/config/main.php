@@ -69,9 +69,9 @@ return [
             // following line will restrict access to admin controller from frontend application
             'as frontend' => 'dektrium\user\filters\FrontendFilter',
         ],*/
-        /*'filemanager' => [
+        'filemanager' => [
             // following line will restrict access to admin controller from frontend application
             'as frontend' => 'fabiomlferreira\filemanager\filters\FrontendFilter',
-        ],*/
+        ],
     ],
 ];

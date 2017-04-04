@@ -180,7 +180,6 @@ return [
                 }
 
             ],
-            'as frontend' => 'fabiomlferreira\filemanager\filters\FrontendFilter',
         ],
     ]
 ];
