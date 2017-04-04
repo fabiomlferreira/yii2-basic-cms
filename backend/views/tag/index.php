@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a(Yii::t('app', 'Create Tag'), ['create'], ['class' => 'btn btn-success']) ?>
             </div>
 
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive">
                     <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'columns' => [

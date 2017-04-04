@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a($postType == 'post' ?  Yii::t('app', 'Create Posts') : Yii::t('app', 'Create Pages'), ['/post/create/'.$postType], ['class' => 'btn btn-success']) ?>
             </div>
 
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive">
                     <?php
                     $gridViewColumnsArray = [
                         //['class' => 'yii\grid\SerialColumn'],
