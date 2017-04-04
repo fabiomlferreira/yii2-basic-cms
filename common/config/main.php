@@ -50,9 +50,9 @@ return [
             'showScriptName' => false,
             
         ],
-        /*'config' => [
+        'config' => [
             'class' => 'common\components\Config'
-        ],
+        ],/*
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -156,6 +156,31 @@ return [
                     'size' => [300, 300],
                 ],
             ],
+            //restringe o acesso a este modulo
+            'as access' => [
+                'class' => 'yii\filters\AccessControl',
+                'rules' => [
+                    [
+                        //'actions' => ['filemanager'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            return \Yii::$app->user->can('adminApp');
+                        }
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    if (Yii::$app->user->isGuest)
+                         Yii::$app->controller->redirect(['/login']);
+                    else
+                         Yii::$app->controller->redirect(['/site/restrito',
+                            'name' => Yii::t('app', 'Access denied'),
+                            'message' => Yii::t('app', 'You have no permission to access this page'),
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/'])
+                        ]); //frontend url;
+                }
+
+            ],
+            'as frontend' => 'fabiomlferreira\filemanager\filters\FrontendFilter',
         ],
     ]
 ];
