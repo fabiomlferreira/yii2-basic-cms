@@ -2,7 +2,15 @@ Yii 2 Advanced Project Template
 ===============================
 
 Yii 2 Advanced Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-developing complex Web applications with multiple tiers.
+developing complex Web applications with multiple tiers. Modified by Fábio Ferreira, with:
+Backend - AdminLTE template
+User - yii2-user
+Filemanager - yii2-file-manager
+Simple RBAC
+Menus - to create menus for frontend
+Configuration - table for generic configurations
+Post and Pages - we can create posts and pages with slug generation
+Tags and categories for posts and pages 
 
 The template includes three tiers: front end, back end, and console, each of which
 is a separate Yii application.

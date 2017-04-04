@@ -1,7 +1,7 @@
 <?php
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'name' => "Dietas",
+    'name' => "Site Name",
     'language' => 'pt-PT',
     'components' => [
         /*'assetManager' => [

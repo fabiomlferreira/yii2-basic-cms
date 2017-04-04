@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/'], 'https') ?>">Login na administração - <b>Dietas</b></a>
+        <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/'], 'https') ?>">Login na administração - <?= Yii::$app->params['featuredSiteName'] ?></a>
     </div><!-- /.login-logo -->
     <div class="">
         <div class="panel panel-default">

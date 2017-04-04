@@ -26,7 +26,7 @@ $this->title = $name;
             </p>
             <br>
             <?php $url = empty($url) ? ['/'] : $url; ?> 
-            <h4><?= Html::a('Voltar para <b>Dietas</b>', $url)?>   </h4>
+            <h4><?= Html::a('Voltar para '.Yii::$app->params['featuredSiteName'], $url)?>   </h4>
         </div>
     </div>
 

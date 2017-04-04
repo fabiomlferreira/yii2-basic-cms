@@ -14,7 +14,7 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@bower') . '/admin-l
 
 <header class="main-header">
 
-<?= Html::a("<b>DIETAS</b>", Yii::$app->homeUrl, ['class' => 'logo']) ?>
+<?= Html::a(Yii::$app->params['headerLogoText'], Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
 

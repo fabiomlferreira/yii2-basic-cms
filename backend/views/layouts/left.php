@@ -37,7 +37,7 @@ use yii\helpers\Url;
                     </ul>
                 </li>
             <?php endif; ?>
-            <li class="header">Dietas</li>
+                <li class="header"><?= Yii::$app->name ?></li>
 
 
 
