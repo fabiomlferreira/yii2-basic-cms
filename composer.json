@@ -1,17 +1,16 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
-    "keywords": ["yii2", "framework", "advanced", "project template"],
+    "name": "fabiomlferreira/yii2-basic-cms",
+    "description": "Yii 2 Advanced Project Template with basic CMS",
+    "keywords": ["yii2", "framework", "advanced", "project template", "cms", "basic"],
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
-    "support": {
-        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii2"
-    },
+    "authors": [
+        {
+            "name": "fabiomlferreira",
+            "email": "fabiomlferreira@hotmail.com"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable" : true,
     "require": {
@@ -27,16 +26,6 @@
         "kartik-v/yii2-widget-timepicker": "*",
         "kartik-v/yii2-widget-select2": "*",
         "bower-asset/admin-lte": "*@stable",
-        "bower-asset/simple-line-icons":"*",
-        "bower-asset/owl.carousel":"*",
-        "bower-asset/magnific-popup": "*",
-        "bower-asset/modernizr": "*",
-        "bower-asset/jquery.cookie": "*",
-        "bower-asset/jquery-validation": "*",
-        "bower-asset/jquery.easy-pie-chart": "*",
-        "bower-asset/jquery.lazyload":"*",
-        "bower-asset/isotope":"*",
-        "bower-asset/vide":"*",
         "yiisoft/yii2-jui": "~2.0.0"
     },
     "require-dev": {
