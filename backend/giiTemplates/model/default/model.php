@@ -62,7 +62,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     }
     
     /**
-    * função dos behaviors, mete automáticamente timesampts no created_at e updated_at
+    * Behaviors function, automatically add timestamps to created_at and updated_at
     * @return type
     */
     public function behaviors()

@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= "<?= " ?>Html::a(<?= $generator->generateString('Create ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>, ['create'], ['class' => 'btn btn-success']) ?>
             </div>
 
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body table-responsive">
         <?php if ($generator->indexWidgetType === 'grid'): ?>
             <?= "<?= " ?>GridView::widget([
                 'dataProvider' => $dataProvider,
