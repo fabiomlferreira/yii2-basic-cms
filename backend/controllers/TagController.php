@@ -3,17 +3,18 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Category;
+use common\models\Tag;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\db\Query;
 
 /**
- * CategoryController implements the CRUD actions for Category model.
+ * TagController implements the CRUD actions for Tag model.
  */
-class CategoryController extends Controller
+class TagController extends Controller
 {
     public function behaviors()
     {
@@ -28,7 +29,7 @@ class CategoryController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'tag-list'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
                             return \Yii::$app->user->can('adminApp');
@@ -50,22 +51,22 @@ class CategoryController extends Controller
     }
 
     /**
-     * Lists all Category models.
+     * Lists all Tag models.
      * @return mixed
      */
-    public function actionIndex($postType = 'post')
+    public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Category::find()->where(['type' => $postType, 'lang' => \Yii::$app->language]),
+            'query' => Tag::find(),
         ]);
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'postType'     => $postType,
         ]);
     }
 
     /**
-     * Displays a single Category model.
+     * Displays a single Tag model.
      * @param integer $id
      * @return mixed
      */
@@ -77,16 +78,14 @@ class CategoryController extends Controller
     }
 
     /**
-     * Creates a new Category model.
+     * Creates a new Tag model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($postType='post')
+    public function actionCreate()
     {
-        $model = new Category();
+        $model = new Tag();
         $model->loadDefaultValues();
-        $model->lang = \Yii::$app->language;
-        $model->type = $postType;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -98,7 +97,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Updates an existing Category model.
+     * Updates an existing Tag model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -106,7 +105,7 @@ class CategoryController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -117,7 +116,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Deletes an existing Category model.
+     * Deletes an existing Tag model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -128,17 +127,38 @@ class CategoryController extends Controller
 
         return $this->redirect(['index']);
     }
+    
+    /**
+     * Return the tags available
+     * @param type $q
+     * @return type
+     */
+    public function actionTagList($q) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        $query = new Query;
+        $query->select('tag as id, tag AS text') // the tag as id is to prevent add multiple times the same tag on update a post
+            ->from('tag')
+            ->where('tag LIKE "%' . $q .'%"')
+            ->orderBy(['count' => SORT_DESC])
+            ->limit(20);
+        $command = $query->createCommand();
+        $data = $command->queryAll();
+        $out['results'] = array_values($data);
+
+        return $out;
+    }
 
     /**
-     * Finds the Category model based on its primary key value.
+     * Finds the Tag model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Category the loaded model
+     * @return Tag the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = Tag::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

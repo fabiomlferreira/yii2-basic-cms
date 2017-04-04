@@ -36,7 +36,8 @@
         "bower-asset/jquery.easy-pie-chart": "*",
         "bower-asset/jquery.lazyload":"*",
         "bower-asset/isotope":"*",
-        "bower-asset/vide":"*"
+        "bower-asset/vide":"*",
+        "yiisoft/yii2-jui": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

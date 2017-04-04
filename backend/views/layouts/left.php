@@ -44,7 +44,18 @@ use yii\helpers\Url;
             
             <?php 
             if(Yii::$app->user->can('adminApp')): ?>
+
                 <li><a href="<?= Url::to(['/user/admin/index']) ?>"><i class="fa fa-user"></i> Utilizadores</a></li> 
+                <li class="treeview <?= Yii::$app->controller->id == 'post' ? 'active' : '' ?>">
+                    <a href="<?= Url::to(['/post/index']) ?>">
+                        <i class="fa fa-newspaper-o"></i> 
+                        <span>Blog</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="<?= Yii::$app->controller->action->id == 'index' ? 'active' : '' ?>"><a href="<?= Url::to(['/post/index']) ?>" ><i class="fa fa-circle-o"></i> Listar posts</a></li>
+                        <li class="<?= Yii::$app->controller->action->id == 'create' ? 'active' : '' ?>"><a href="<?= Url::to(['/post/create']) ?>" ><i class="fa fa-circle-o"></i> Novo post</a></li>
+                    </ul>
+                </li>
                 <li>
                   <a href="<?= Url::to(['/filemanager'])?>">
                     <i class="fa fa-th"></i> <span>Gestor de ficheiros</span>
