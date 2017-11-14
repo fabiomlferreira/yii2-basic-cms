@@ -24,11 +24,6 @@ class RbacController extends Controller {
         $manageApp->description = 'Pode gerir a app';
         $auth->add($manageApp);
         
-        //Sell, pode vender coisas no site
-        $sellApp = $auth->createPermission('sellApp');
-        $sellApp->description = 'Pode vender produtos na app';
-        $auth->add($sellApp);
-        
  
         //Basic - Basic user stuff user stuff, everyuser can do this
         $basicApp = $auth->createPermission('basicApp');
@@ -46,22 +41,12 @@ class RbacController extends Controller {
         $auth->add($user);
          // ... add permissions as children of $contributor ..
         $auth->addChild($user, $basicApp);
-        
-     
-        
-        //Seller
-        $seller = $auth->createRole('seller');
-        $seller->ruleName = $rule->name;
-        $auth->add($seller);
-        $auth->addChild($seller, $user);
-        // ... add permissions as children of $contributor ..
-        $auth->addChild($seller, $sellApp);
-        
+
         //Manager
         $manager = $auth->createRole('manager');
         $manager->ruleName = $rule->name;
         $auth->add($manager);
-        $auth->addChild($manager, $seller);
+        $auth->addChild($manager, $user);
         // ... add permissions as children of $admin ..
         $auth->addChild($manager, $manageApp);
 
