@@ -25,10 +25,8 @@ class UserRoleRule extends Rule
             return $role == 'admin';
         } elseif ($item->name === 'manager') {
             return $role == 'admin' || $role == 'manager';
-        } elseif ($item->name === 'seller') {
-            return $role == 'admin' || $role == 'manager' || $role == 'seller';
-        }elseif ($item->name === 'user') {
-            return $role == 'admin' || $role == 'manager' || $role == 'seller' || $role == 'user' || $role == NULL;
+        } elseif ($item->name === 'user') {
+            return $role == 'admin' || $role == 'manager' || $role == 'user' || $role == NULL;
         } else {
             return false;
         }
