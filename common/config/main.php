@@ -8,10 +8,10 @@ return [
     'name' => "Site Name",
     'language' => 'pt-PT',
     'components' => [
-        /*'assetManager' => [
+        'assetManager' => [
             'appendTimestamp' => true,
             'bundles' => [
-                'yii\web\JqueryAsset' => [
+                /*'yii\web\JqueryAsset' => [
                     'js' => [
                         'jquery.min.js'
                         //YII_ENV_DEV ? 'jquery.js' : 'jquery.min.js'
@@ -34,9 +34,14 @@ return [
                     'css' => [
                         'css/bootstrap.min.css'
                     ]
-                ],
+                ],*/
+	        'pendalf89\tinymce\TinyMceAsset' => [ //remove this when the pendalf89\tinymce is updated
+                    'js' => [
+                        'tinymce.min.js'
+                    ]
+	 	],
             ],
-        ],*/
+        ],
         
         'cache' => [
             'class' => 'yii\caching\FileCache',
